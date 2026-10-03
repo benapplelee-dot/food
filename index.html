@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="description" content="按城市整理的美食攻略，英文榜单和小红书两边核对。">
+<title>吃什么 · 美食攻略</title>
+<style>
+:root{--bg:#f7f3ea;--card:#fffdf8;--ink:#232019;--ink2:#6b6458;--line:#e6dfd1;--accent:#1f6f5c;--accent-ink:#fff;
+  --ok:#1f7a4d;--ok-bg:#e5f3ea;--no:#7a7466;--no-bg:#efebe2;--mix:#9a5b00;--mix-bg:#fbefd9;--warn:#9a3412;--warn-bg:#fdeee6;--soft:#efe8da}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#14130f;--card:#1e1c17;--ink:#efe9dc;--ink2:#aaa292;--line:#35312a;--accent:#5cc3a3;--accent-ink:#0d1a15;
+  --ok:#6fd49b;--ok-bg:#1c3328;--no:#a39d8f;--no-bg:#2a2721;--mix:#f0b25a;--mix-bg:#3a2c16;--warn:#ff9e7a;--warn-bg:#3a2119;--soft:#28251f}}
+:root[data-theme="dark"]{--bg:#14130f;--card:#1e1c17;--ink:#efe9dc;--ink2:#aaa292;--line:#35312a;--accent:#5cc3a3;--accent-ink:#0d1a15;
+  --ok:#6fd49b;--ok-bg:#1c3328;--no:#a39d8f;--no-bg:#2a2721;--mix:#f0b25a;--mix-bg:#3a2c16;--warn:#ff9e7a;--warn-bg:#3a2119;--soft:#28251f}
+*{box-sizing:border-box}html{-webkit-text-size-adjust:100%}
+body{margin:0 auto;max-width:680px;background:var(--bg);color:var(--ink);padding:0 16px calc(40px + env(safe-area-inset-bottom));
+  font:16px/1.6 -apple-system,BlinkMacSystemFont,"PingFang SC","Helvetica Neue","Noto Sans SC","Microsoft YaHei",sans-serif}
+a{color:var(--accent);text-decoration:none}
+header{padding:22px 0 8px}
+.brand{font-size:13px;letter-spacing:.24em;color:var(--ink2);margin:0}
+.tabs{position:sticky;top:0;z-index:5;background:var(--bg);display:flex;gap:6px;align-items:center;padding:10px 0;border-bottom:1px solid var(--line);overflow-x:auto}
+.tabs a{padding:6px 14px;border-radius:999px;font-weight:600;font-size:15px;border:1.5px solid var(--line);color:var(--ink2);white-space:nowrap}
+.tabs a.on{background:var(--ink);color:var(--bg);border-color:var(--ink)}
+.tabs .more{font-size:12px;color:var(--ink2);white-space:nowrap;margin-left:4px}
+h1{font-size:28px;margin:18px 0 6px}
+.intro{color:var(--ink2);font-size:14px;margin:0 0 4px}
+.checked{color:var(--ink2);font-size:12px;margin:0 0 6px}
+h2{font-size:20px;margin:26px 0 6px;padding-top:8px;border-top:3px solid var(--ink)}
+.gnote{font-size:14px;background:var(--soft);border-radius:12px;padding:10px 12px;margin:8px 0 10px}
+.chips{display:flex;flex-wrap:wrap;gap:8px;margin:0 0 6px}
+.chips a{background:var(--card);border:1px solid var(--line);border-radius:999px;padding:5px 12px;font-size:14px;color:var(--ink)}
+.dish{scroll-margin-top:64px}
+h3{font-size:22px;margin:28px 0 4px}
+h3 small{font-size:13px;color:var(--ink2);font-weight:400;letter-spacing:.04em;margin-left:6px}
+.lead{margin:0 0 10px;font-size:15px}
+.warn,.avoid{background:var(--warn-bg);border-left:3px solid var(--warn);border-radius:8px;padding:9px 12px;font-size:14px;margin:0 0 12px}
+.aside{background:var(--soft);border-radius:10px;padding:10px 12px;font-size:14px;color:var(--ink);margin:4px 0 12px}
+.pick{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:16px;margin:0 0 12px;box-shadow:0 1px 2px rgba(0,0,0,.04),0 6px 18px rgba(60,40,10,.05)}
+.ph{display:flex;gap:10px;align-items:flex-start}
+.rk{flex:0 0 28px;height:28px;border-radius:50%;background:var(--accent);color:var(--accent-ink);display:flex;align-items:center;justify-content:center;font-weight:700;font-size:14px;margin-top:2px}
+.ph h4{margin:0;font-size:18px;line-height:1.3}
+.pz{display:block;font-size:13px;color:var(--ink2)}
+.area{margin-left:auto;font-size:12px;color:var(--ink2);border:1px solid var(--line);border-radius:999px;padding:2px 8px;white-space:nowrap}
+.bds{display:flex;flex-wrap:wrap;gap:6px;margin:10px 0 2px}
+.bd{font-size:12px;padding:2px 9px;border-radius:999px}
+.bd b{font-weight:600}
+.bd.ok{background:var(--ok-bg);color:var(--ok)}.bd.no{background:var(--no-bg);color:var(--no)}.bd.mix{background:var(--mix-bg);color:var(--mix)}
+.bdn{font-size:12px;color:var(--ink2);margin:2px 0 8px}
+.why{margin:0 0 8px;padding-left:18px;font-size:15px}.why li{margin:3px 0}
+dl{display:grid;grid-template-columns:auto 1fr;gap:4px 12px;margin:0;font-size:14px}
+dt{color:var(--ink2);white-space:nowrap}dd{margin:0}
+.tip{font-size:13px;color:var(--ink2);margin:8px 0 0}
+.acts{display:flex;gap:8px;margin-top:12px}
+.btn{display:inline-flex;align-items:center;justify-content:center;min-height:40px;padding:0 16px;border-radius:10px;background:var(--accent);color:var(--accent-ink);font-weight:600;font-size:14px}
+.btn.ghost{background:transparent;color:var(--accent);border:1.5px solid var(--accent)}
+footer{margin-top:34px;border-top:1px solid var(--line);padding-top:14px;font-size:13px;color:var(--ink2)}
+footer ul{padding-left:18px;margin:6px 0}
+</style>
+</head>
+<body>
+<header><p class="brand">吃什么 · 美食攻略</p></header>
+<nav class="tabs" id="tabs"><a href="#perth" class="on">Perth</a><span class="more">更多城市陆续添加</span></nav>
+<section class="city" id="perth">
+  <h1>Perth 珀斯</h1>
+  <p class="intro">选店规则：英文侧看 WA Good Food Guide、Broadsheet、Perth is OK 等榜单，中文侧看小红书真实探店和评论区。两边都认的排前面；只有一边有口碑的会明确标出来。</p>
+  <p class="checked">资料核对于 2026 年 10 月，营业时间以店家当天为准</p>
+  <section class="grp" id="sea">
+  <h2>东南亚菜</h2>
+  <p class="gnote">一个小发现：Victoria Park 的 Albany Highway 是东南亚菜一条街，下面的肉骨茶和印尼炸鸡饭有五家都在这条路上，可以一次逛完。</p>
+  <nav class="chips"><a href="#bkt">肉骨茶</a><a href="#krapao">泰式打抛</a><a href="#pho">越南河粉</a><a href="#ayam">印尼炸鸡饭</a></nav>
+  <section class="dish" id="bkt">
+  <h3>肉骨茶 <small>Bak Kut Teh</small></h3>
+  <p class="lead">要药材味重的，就找马来西亚巴生（Klang）派：汤色深、当归和药材香浓。新加坡是胡椒派，汤清、白胡椒辣，不是一回事。</p><p class="warn">英文榜单都没有单独收录肉骨茶，下面两家只有华人口碑，没有英文榜单背书。</p>
+  <article class="pick">
+  <div class="ph"><span class="rk">1</span><div><h4>Kee Hiong Klang Bak Kut Teh</h4><span class="pz">奇香巴生肉骨茶</span></div><span class="area">Victoria Park</span></div>
+  <div class="bds"><span class="bd no" title="英文榜单未收录"><b>英文榜单</b> —</span><span class="bd ok" title="华人好评，巴生本地人认证"><b>小红书</b> ✓</span></div>
+  <p class="bdn">英文侧：英文榜单未收录；小红书：华人好评，巴生本地人认证</p>
+  <ul class="why"><li>巴生老字号奇香肉骨茶的珀斯店，走的就是药材派。</li><li>小红书上有巴生人留言：这个味道真的是家里的味道；探店说汤味超浓、肉很多。</li></ul>
+  <dl><dt>点什么</dt><dd>肉骨茶（2–3 人份），不吃内脏跟柜台说；另外点干锅肉骨茶。</dd><dt>时间</dt><dd>每天 11:00–14:30、17:30–20:30（各平台略有出入，去前确认）</dd><dt>地址</dt><dd>4/393 Albany Hwy, Victoria Park WA 6100</dd></dl>
+  <p class="tip">老帖里的地址是 800 Albany Hwy，现在搬到了 393 号。</p>
+  <div class="acts"><a class="btn" href="https://www.google.com/maps/search/?api=1&amp;query=Kee%20Hiong%20Klang%20Bak%20Kut%20Teh%2C%204/393%20Albany%20Hwy%2C%20Victoria%20Park%20WA%206100" target="_blank" rel="noopener">导航</a></div>
+</article><article class="pick">
+  <div class="ph"><span class="rk">2</span><div><h4>Yum Yum Tree</h4><span class="pz">原 Lepak Kopitiam Vic Park</span></div><span class="area">Victoria Park</span></div>
+  <div class="bds"><span class="bd no" title="英文榜单未收录"><b>英文榜单</b> —</span><span class="bd ok" title="华人好评为主，也有嫌腻、嫌贵"><b>小红书</b> ✓</span></div>
+  <p class="bdn">英文侧：英文榜单未收录；小红书：华人好评为主，也有嫌腻、嫌贵</p>
+  <ul class="why"><li>小红书高赞帖：肉骨茶一端上桌就飘来很浓的药膳味，汤头偏甘甜，越喝越上头。</li><li>评论区有人说在珀斯算顶流，但有点腻；也有人嫌价格偏高。</li></ul>
+  <dl><dt>点什么</dt><dd>肉骨茶；顺便试猪脚姜和煎蕊。</dd><dt>时间</dt><dd>周一、三至六 9:00–14:00、17:00–20:00；周日 9:00–14:00；周二休</dd><dt>地址</dt><dd>319 Albany Hwy, Victoria Park WA 6100</dd></dl>
+  <p class="tip">周二不开门，周日只有中午。</p>
+  <div class="acts"><a class="btn" href="https://www.google.com/maps/search/?api=1&amp;query=Yum%20Yum%20Tree%2C%20319%20Albany%20Hwy%2C%20Victoria%20Park%20WA%206100" target="_blank" rel="noopener">导航</a><a class="btn ghost" href="tel:+61431391119">打电话</a></div>
+</article><p class="avoid">不推荐：Crown 酒店 Silks 的新加坡白胡椒肉骨茶，有华人探店说只尝到白胡椒、没有肉骨茶味，价格还高。</p>
+</section><section class="dish" id="krapao">
+  <h3>泰式打抛 <small>Pad Kra Pao</small></h3>
+  <p class="lead">打抛是罗勒炒肉碎盖饭，好吃的标准是罗勒香、锅气足、敢放辣，再加一个溏心煎蛋。</p>
+  <article class="pick">
+  <div class="ph"><span class="rk">1</span><div><h4>Thailicious</h4><span class="pz">Perth Thailicious Restaurant</span></div><span class="area">Northbridge</span></div>
+  <div class="bds"><span class="bd no" title="未进英文榜单，但点评网站 4.4 分、两千多条评价"><b>英文榜单</b> —</span><span class="bd ok" title="小红书打抛帖最多的一家"><b>小红书</b> ✓</span></div>
+  <p class="bdn">英文侧：未进英文榜单，但点评网站 4.4 分、两千多条评价；小红书：小红书打抛帖最多的一家</p>
+  <ul class="why"><li>小红书专门写它打抛的帖子最多：打抛猪真的离不开、必回访的半熟蛋打抛猪饭、泰国朋友推荐。</li><li>近 1000 赞的珀斯前十必吃榜也有它：打抛猪、猪颈肉、绿咖喱、泰奶，口味重、超敢放辣。</li></ul>
+  <dl><dt>点什么</dt><dd>打抛猪饭加煎蛋，辣度直接说要泰辣。</dd><dt>时间</dt><dd>每天 11:30–21:30</dd><dt>地址</dt><dd>7/160 James St, Northbridge WA 6003</dd></dl>
+  <p class="tip">2012 年开到现在，泰国人也常去。服务时好时坏。</p>
+  <div class="acts"><a class="btn" href="https://www.google.com/maps/search/?api=1&amp;query=Thailicious%2C%207/160%20James%20St%2C%20Northbridge%20WA%206003" target="_blank" rel="noopener">导航</a><a class="btn ghost" href="tel:+61893285403">打电话</a></div>
+</article><article class="pick">
+  <div class="ph"><span class="rk">2</span><div><h4>Rym Tarng</h4></div><span class="area">Bicton（近 Fremantle）</span></div>
+  <div class="bds"><span class="bd ok" title="WA Good Food Guide 2026 Top 100，泰餐榜点名它的打抛猪"><b>英文榜单</b> ✓</span><span class="bd ok" title="小红书探店标题都是好评"><b>小红书</b> ✓</span></div>
+  <p class="bdn">英文侧：WA Good Food Guide 2026 Top 100，泰餐榜点名它的打抛猪；小红书：小红书探店标题都是好评</p>
+  <ul class="why"><li>主厨出自 Long Chim、Wildflower、Hearth，英文榜单两边都认可。</li><li>WA Good Food Guide 的泰餐榜直接点名它的打抛猪，罗勒香很足。</li></ul>
+  <dl><dt>点什么</dt><dd>打抛猪（pad ka pao pork）；招牌还有炭烤猪颈肉、虾肉饼。</dd><dt>时间</dt><dd>周三至周日 11:30–15:00、17:00–20:30；周一、二休</dd><dt>地址</dt><dd>Shop 8, 258 Canning Hwy, Bicton WA 6157</dd></dl>
+  <p class="tip">只有 16 个位，官网 rymtarng.com 订位。</p>
+  <div class="acts"><a class="btn" href="https://www.google.com/maps/search/?api=1&amp;query=Rym%20Tarng%2C%20Shop%208%2C%20258%20Canning%20Hwy%2C%20Bicton%20WA%206157" target="_blank" rel="noopener">导航</a><a class="btn ghost" href="tel:+61862465789">打电话</a></div>
+</article><article class="pick">
+  <div class="ph"><span class="rk">3</span><div><h4>Bangkok Brothers</h4></div><span class="area">Northbridge</span></div>
+  <div class="bds"><span class="bd ok" title="WA Good Food Guide 泰餐榜收录，点名脆皮猪打抛"><b>英文榜单</b> ✓</span><span class="bd mix" title="以前评价很高，近期有差评"><b>小红书</b> 有分歧</span></div>
+  <p class="bdn">英文侧：WA Good Food Guide 泰餐榜收录，点名脆皮猪打抛；小红书：以前评价很高，近期有差评</p>
+  <ul class="why"><li>小红书 2023 年的帖子称它珀斯泰国菜天花板，牛肉打抛饭和在泰国吃的一样，可以选辣度。</li><li>2025 年 9 月有评论说海鲜不新鲜，原帖作者回复可能换了厨师。</li></ul>
+  <dl><dt>点什么</dt><dd>脆皮猪打抛（graprao moo grob）或牛肉打抛。</dd><dt>时间</dt><dd>周一至四 11:00–15:00、17:00–21:00；周五到 22:00；周六 16:30 起开到凌晨 2:00；周日 11:30–15:00、16:30–21:00</dd><dt>地址</dt><dd>91 James St, Northbridge WA 6003</dd></dl>
+  <p class="tip">外卖常送错，建议堂食。份量大，适合人多。</p>
+  <div class="acts"><a class="btn" href="https://www.google.com/maps/search/?api=1&amp;query=Bangkok%20Brothers%2C%2091%20James%20St%2C%20Northbridge%20WA%206003" target="_blank" rel="noopener">导航</a><a class="btn ghost" href="tel:+61404371667">打电话</a></div>
+</article><p class="aside">南下顺路：Busselton 的 Thai Lemongrass 在小红书上被称为全西澳最好吃的泰餐，打抛和脆皮五花肉炒空心菜都必点，常客满要预约。离 Perth 开车约两个半小时，只适合去南边玩时顺路。</p>
+</section><section class="dish" id="pho">
+  <h3>越南河粉 <small>Phở</small></h3>
+  <p class="lead">先降低预期：小红书上有位吃遍越南和东澳的河粉爱好者，整体评价珀斯的河粉不太行。下面是两边口碑里相对最稳的。</p>
+  <article class="pick">
+  <div class="ph"><span class="rk">1</span><div><h4>Pho Thanh Dat</h4><span class="pz">Thanh Dat Vietnamese Noodle House</span></div><span class="area">Northbridge</span></div>
+  <div class="bds"><span class="bd ok" title="Perth is OK 越南菜榜单收录"><b>英文榜单</b> ✓</span><span class="bd ok" title="华人口碑最集中"><b>小红书</b> ✓</span></div>
+  <p class="bdn">英文侧：Perth is OK 越南菜榜单收录；小红书：华人口碑最集中</p>
+  <ul class="why"><li>Perth is OK 点名它的牛肋排河粉和 Pho the Lot（全料河粉）。</li><li>小红书评论区反复出现永远的神，最近还有人说比旁边的越华和 Trang 好吃多了；也有人说份量缩水了。</li></ul>
+  <dl><dt>点什么</dt><dd>牛肋排河粉，或者全料的 Pho the Lot。</dd><dt>时间</dt><dd>周一、二、四、五 11:00–15:00、17:30–20:00；周六、日 11:00–20:00；周三休</dd><dt>地址</dt><dd>425 William St, Northbridge WA 6003（Robinson Ave 路口）</dd></dl>
+  <p class="tip">周三不开门。</p>
+  <div class="acts"><a class="btn" href="https://www.google.com/maps/search/?api=1&amp;query=Pho%20Thanh%20Dat%2C%20425%20William%20St%2C%20Northbridge%20WA%206003%EF%BC%88Robinson%20Ave%20%E8%B7%AF%E5%8F%A3%EF%BC%89" target="_blank" rel="noopener">导航</a><a class="btn ghost" href="tel:+61892289988">打电话</a></div>
+</article><article class="pick">
+  <div class="ph"><span class="rk">2</span><div><h4>Sup So Good</h4></div><span class="area">Northbridge</span></div>
+  <div class="bds"><span class="bd ok" title="Broadsheet 收录"><b>英文榜单</b> ✓</span><span class="bd mix" title="石锅版好评，普通版一般"><b>小红书</b> 有分歧</span></div>
+  <p class="bdn">英文侧：Broadsheet 收录；小红书：石锅版好评，普通版一般</p>
+  <ul class="why"><li>招牌是石锅牛肋排河粉，石锅端上来汤还在冒泡，Broadsheet 专门介绍过。</li><li>小红书：石锅版值得试，普通版一般；也有人嫌汤蒜味重、粉煮得太软。</li></ul>
+  <dl><dt>点什么</dt><dd>只点石锅牛肋排河粉。</dd><dt>时间</dt><dd>周二至四 11:30–20:30；周五至日 11:30–21:30；周一休</dd><dt>地址</dt><dd>3/297 William St, Northbridge WA 6003</dd></dl>
+  <p class="tip">周一不开门。</p>
+  <div class="acts"><a class="btn" href="https://www.google.com/maps/search/?api=1&amp;query=Sup%20So%20Good%2C%203/297%20William%20St%2C%20Northbridge%20WA%206003" target="_blank" rel="noopener">导航</a><a class="btn ghost" href="tel:+61892289917">打电话</a></div>
+</article><p class="aside">关于 Trang&#x27;s Cafe &amp; Noodle House（Girrawheen 越南区）：小红书上曾被称为全珀斯汤最好喝的河粉，Perth is OK 也收录过。但 2026 年初有好几条评论说去了两次都关门、疑似永久停业，去之前务必先打电话确认：(08) 9247 3880。</p>
+</section><section class="dish" id="ayam">
+  <h3>印尼炸鸡饭 <small>Ayam Penyet / Ayam Geprek</small></h3>
+  <p class="lead">印尼炸鸡饭有两种：Ayam Penyet 是炸鸡压扁配参巴辣酱，Ayam Geprek 是炸鸡用锤子捶碎再淋酱。</p><p class="warn">说实话，这道菜没有一家是英文榜单和小红书都明确夸鸡本身的，下面按各自的长处排，你自己挑。</p>
+  <article class="pick">
+  <div class="ph"><span class="rk">1</span><div><h4>Batavia Corner</h4></div><span class="area">East Victoria Park</span></div>
+  <div class="bds"><span class="bd ok" title="Perth is OK 印尼菜榜单收录"><b>英文榜单</b> ✓</span><span class="bd no" title="小红书讨论很少"><b>小红书</b> —</span></div>
+  <p class="bdn">英文侧：Perth is OK 印尼菜榜单收录；小红书：小红书讨论很少</p>
+  <ul class="why"><li>1998 年开到现在的家族老店，Perth is OK 形容它的 ayam penyet 炸得非常酥，烤牛排骨是传奇级。</li><li>小红书只找到一条简短好评，说味道很正宗。</li></ul>
+  <dl><dt>点什么</dt><dd>Ayam penyet；加一份烤牛排骨（iga bakar）。</dd><dt>时间</dt><dd>每天 11:00–21:00</dd><dt>地址</dt><dd>3/912 Albany Hwy, East Victoria Park WA 6101</dd></dl>
+  
+  <div class="acts"><a class="btn" href="https://www.google.com/maps/search/?api=1&amp;query=Batavia%20Corner%2C%203/912%20Albany%20Hwy%2C%20East%20Victoria%20Park%20WA%206101" target="_blank" rel="noopener">导航</a></div>
+</article><article class="pick">
+  <div class="ph"><span class="rk">2</span><div><h4>Ria Ayam Penyet</h4></div><span class="area">Victoria Park</span></div>
+  <div class="bds"><span class="bd ok" title="Perth is OK 印尼菜榜单收录"><b>英文榜单</b> ✓</span><span class="bd mix" title="炸鸡评价一般，烤牛排骨和珍多冰被夸"><b>小红书</b> 有分歧</span></div>
+  <p class="bdn">英文侧：Perth is OK 印尼菜榜单收录；小红书：炸鸡评价一般，烤牛排骨和珍多冰被夸</p>
+  <ul class="why"><li>印尼起家的连锁店，Perth is OK 说它的 ayam penyet 最接近印尼本地的味道。</li><li>小红书对炸鸡本身多是中规中矩；2026 年有印尼同学力荐，说配的参巴虾酱辣椒很好吃。最被夸的是烤牛排骨和珍多冰。</li></ul>
+  <dl><dt>点什么</dt><dd>Ayam penyet 配参巴虾酱；必加烤牛排骨（iga bakar）和珍多冰（es cendol）。</dd><dt>时间</dt><dd>每天 11:00–21:00</dd><dt>地址</dt><dd>417 Albany Hwy, Victoria Park WA 6100</dd></dl>
+  <p class="tip">米饭要另点，辣椒酱很辣，可以选辣度。Kardinya 有分店。</p>
+  <div class="acts"><a class="btn" href="https://www.google.com/maps/search/?api=1&amp;query=Ria%20Ayam%20Penyet%2C%20417%20Albany%20Hwy%2C%20Victoria%20Park%20WA%206100" target="_blank" rel="noopener">导航</a><a class="btn ghost" href="tel:+61865073901">打电话</a></div>
+</article><article class="pick">
+  <div class="ph"><span class="rk">3</span><div><h4>Geprek in Perth</h4><span class="pz">印尼捶打炸鸡</span></div><span class="area">Victoria Park</span></div>
+  <div class="bds"><span class="bd no" title="2025 年 10 月新开，英文榜单还没收录"><b>英文榜单</b> —</span><span class="bd ok" title="好评为主，也有嫌咸"><b>小红书</b> ✓</span></div>
+  <p class="bdn">英文侧：2025 年 10 月新开，英文榜单还没收录；小红书：好评为主，也有嫌咸</p>
+  <ul class="why"><li>小红书好几篇探店：炸鸡捶碎淋酱，参巴辣椒很下饭；最受欢迎的是咸蛋黄酱和明太子松露；套餐配的茶被夸很香，有人一周去三次。</li><li>也有评论说太咸、不好吃。</li></ul>
+  <dl><dt>点什么</dt><dd>Geprek sambalado，或者咸蛋黄酱口味，点含茶的套餐。</dd><dt>时间</dt><dd>每天 11:00–20:00</dd><dt>地址</dt><dd>393 Albany Hwy, Victoria Park WA 6100</dd></dl>
+  <p class="tip">饭点要排队，开门就去基本不用等。</p>
+  <div class="acts"><a class="btn" href="https://www.google.com/maps/search/?api=1&amp;query=Geprek%20in%20Perth%2C%20393%20Albany%20Hwy%2C%20Victoria%20Park%20WA%206100" target="_blank" rel="noopener">导航</a></div>
+</article>
+</section>
+</section>
+</section>
+<footer>
+  <p>英文侧资料来源：</p><ul><li><a href="https://wagoodfoodguide.com/top-100/" target="_blank" rel="noopener">WA Good Food Guide 2026 Top 100</a></li><li><a href="https://wagoodfoodguide.com/best-thai-restaurants-perth/" target="_blank" rel="noopener">WA Good Food Guide：Perth 最好的泰餐</a></li><li><a href="https://www.broadsheet.com.au/perth/food-and-drink/article/seven-spicy-contenders-title-best-thai-restaurant-perth" target="_blank" rel="noopener">Broadsheet：Perth 七家最好的泰餐</a></li><li><a href="https://www.broadsheet.com.au/perth/northbridge/restaurants/sup-so-good" target="_blank" rel="noopener">Broadsheet：Sup So Good</a></li><li><a href="https://perthisok.com/eat-drink/best-vietnamese-restaurant-perth/" target="_blank" rel="noopener">Perth is OK：最好的越南菜</a></li><li><a href="https://perthisok.com/eat-drink/best-indonesian-restaurants-perth/" target="_blank" rel="noopener">Perth is OK：最好的印尼菜</a></li></ul>
+  <p>中文侧来自小红书公开探店笔记和评论区。只有一边有口碑的店会在卡片上标出来。</p>
+</footer>
+</body>
+</html>
